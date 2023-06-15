@@ -29,7 +29,7 @@ $ sudo apt install python3-pip python3-venv
 $ sudo apt install git
 ```
 
-### Install PostgreSQL and PostGIS
+### Install and Setup PostgreSQL
 
 1. Import the PostgreSQL repository key, and add the repository
 
