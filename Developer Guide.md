@@ -245,3 +245,17 @@ $ python3 manage.py runserver
 ```
 
 5. Using your browser or Postman, navigate to `localhost:8000/api/public` and see if it works
+
+## Troubleshoot
+
+### Error: Connection refused
+
+Detailed error:
+```
+django.db.utils.OperationalError: connection to server at "localhost" (127.0.0.1), port 5434 failed: Connection refused
+        Is the server running on that host and accepting TCP/IP connections?
+```
+
+Solution:
+1. Check your PostgreSQL port using `sudo service postgresql status` for windows users, or `pg_ctl status` for mac users.
+2. If your port is different from port 5434, update your `.env` file accordingly
