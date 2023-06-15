@@ -1,0 +1,4 @@
+env
+env/**
+
+feminnovate_backend/.env
