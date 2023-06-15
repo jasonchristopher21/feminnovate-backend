@@ -117,7 +117,6 @@ Ideally, the folder should have the following structure.
 
 ```
 feminnovate_backend
-├── DeveloperGuide.md
 ├── api
 ├── feminnovate_backend
 │   ├── __init__.py
@@ -127,6 +126,7 @@ feminnovate_backend
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
+├── DeveloperGuide.md
 ├── manage.py
 └── requirements.txt
 ```
@@ -214,7 +214,6 @@ Ideally, the folder should have the following structure.
 
 ```
 feminnovate_backend
-├── DeveloperGuide.md
 ├── api
 ├── feminnovate_backend
 │   ├── __init__.py
@@ -224,6 +223,7 @@ feminnovate_backend
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
+├── DeveloperGuide.md
 ├── manage.py
 └── requirements.txt
 ```
