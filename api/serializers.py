@@ -6,8 +6,9 @@ from django.contrib.auth.models import User
 from api.logic.user_management import register_user, update_user
 
 from api.models import (
-    CompanyProfile,
-    UserProfile
+    Company,
+    UserProfile,
+    Job
 )
 
 
@@ -26,10 +27,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['user', 'name', 'description', 'picture']
 
 
-class CompanyProfileSerializer(serializers.ModelSerializer):
+class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CompanyProfile
+        model = Company
         fields = ['id', 'name', 'description', 'picture', 'website']
 
 
@@ -100,3 +101,21 @@ class JwtSerializer(TokenObtainPairSerializer):
                 }
             else:
                 raise exceptions.AuthenticationFailed(detail="Wrong Password")
+
+
+class JobSerializer(serializers.ModelSerializer):
+    company = CompanySerializer(read_only=True)
+
+    class Meta:
+        model = Job
+        fields = ['id', 'title', 'description', 'responsibilities', 'qualifications', 'company', 'salary',
+                  'location', 'is_active']
+        read_only_fields = ['company', 'is_active']        
+
+class JobListSerializer(serializers.ModelSerializer):
+    company = CompanySerializer(read_only=True)
+
+    class Meta:
+        model = Job
+        fields = ['id', 'description', 'company', 'salary', 'location', 'is_active']
+        read_only_fields = ['company', 'is_active']     

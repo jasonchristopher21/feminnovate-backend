@@ -10,11 +10,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import (
-    CompanyProfile
+    Company,
+    Job
 )
 
 from api.serializers import (
-    CompanyProfileSerializer,
+    CompanySerializer,
+    JobSerializer,
+    JobListSerializer,
     JwtSerializer,
     UserSerializer,
     UserProfileSerializer,
@@ -44,6 +47,7 @@ class PublicView(APIView):
 
 class RegisterUserView(generics.CreateAPIView):
 
+    permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
 
     def post(self, request):
@@ -80,22 +84,67 @@ class UserView(APIView):
         
     
 class JwtView(TokenObtainPairView):
+    permission_classes = [AllowAny]
     serializer_class = JwtSerializer
 
 class CompanyRegisterView(generics.ListCreateAPIView):
 
-    serializer_class = CompanyProfileSerializer
+    serializer_class = CompanySerializer
     permission_classes = [AllowAny]
-    queryset = CompanyProfile.objects.all()
+    queryset = Company.objects.all()
 
 
 class CompanyRetrieveView(generics.RetrieveAPIView):
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, id):
         try:
-            company = CompanyProfile.objects.get(pk=id)
+            company = Company.objects.get(pk=id)
         except:
             return Response({"message": "Company with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
-        serializer = CompanyProfileSerializer(company)
+        serializer = CompanySerializer(company)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+class JobRegisterView(generics.CreateAPIView):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = JobSerializer
+
+    def perform_create(self, serializer):
+        company_id = self.request.data.get('company_id')
+        company = Company.objects.get(pk=company_id)
+        serializer.save(company=company)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class JobListView(generics.ListCreateAPIView):
+
+    permission_classes = [IsAuthenticated]
+    queryset = Job.objects.all()
+
+    def get_serializer_class(self):
+        if (self.request.method == 'POST'):
+            return JobSerializer
+        elif self.request.method == 'GET':
+            return JobListSerializer
+        else:
+            return JobSerializer
+    
+    def perform_create(self, serializer):
+        company_id = self.request.data.get('company_id')
+        company = Company.objects.get(pk=company_id)
+        serializer.save(company=company)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class JobDetailView(generics.RetrieveAPIView):
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = JobSerializer
+
+    def get(self, request, id):
+        try:
+            job = Job.objects.get(pk=id)
+        except:
+            return Response({"message": "Job with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = JobSerializer(job)
+        return Response(serializer.data, status=status.HTTP_200_OK)
