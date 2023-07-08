@@ -7,8 +7,8 @@ from api.logic.user_management import register_user, update_user
 
 from api.models import (
     Company,
+    Job,
     UserProfile,
-    Job
 )
 
 
@@ -110,12 +110,14 @@ class JobSerializer(serializers.ModelSerializer):
         model = Job
         fields = ['id', 'title', 'description', 'responsibilities', 'qualifications', 'company', 'salary',
                   'location', 'is_active']
-        read_only_fields = ['company', 'is_active']        
+        read_only_fields = ['company', 'is_active']
+
 
 class JobListSerializer(serializers.ModelSerializer):
     company = CompanySerializer(read_only=True)
 
     class Meta:
         model = Job
-        fields = ['id', 'description', 'company', 'salary', 'location', 'is_active']
-        read_only_fields = ['company', 'is_active']     
+        fields = ['id', 'description', 'company',
+                  'salary', 'location', 'is_active']
+        read_only_fields = ['company', 'is_active']

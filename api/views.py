@@ -19,7 +19,6 @@ from api.serializers import (
     JobSerializer,
     JobListSerializer,
     JwtSerializer,
-    UserSerializer,
     UserProfileSerializer,
     UserRegistrationSerializer,
     UserUpdateSerializer,
@@ -35,6 +34,9 @@ from api.pagination import JobPagination
 
 
 class PublicView(APIView):
+    """
+    This view is for testing purposes only.
+    """
 
     permission_classes = [AllowAny]
 
@@ -48,6 +50,9 @@ class PublicView(APIView):
 
 
 class RegisterUserView(generics.CreateAPIView):
+    """
+    This view is for registering a new user.
+    """
 
     permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
@@ -62,6 +67,10 @@ class RegisterUserView(generics.CreateAPIView):
 
 
 class UserView(APIView):
+    """
+    This view is for retrieving and updating a user.
+    User data is inferred from the provided username.
+    """
 
     permission_classes = [IsAuthenticated]
 
@@ -86,18 +95,27 @@ class UserView(APIView):
 
 
 class JwtView(TokenObtainPairView):
+    """
+    This view is for the user login endpoint
+    """
     permission_classes = [AllowAny]
     serializer_class = JwtSerializer
 
 
 class CompanyRegisterView(generics.ListCreateAPIView):
-
+    """
+    This view is for registering a new company.
+    """
     serializer_class = CompanySerializer
     permission_classes = [AllowAny]
     queryset = Company.objects.all()
 
 
 class CompanyRetrieveView(generics.RetrieveAPIView):
+    """
+    This view is for retrieving a company based on the provided company ID
+    as the query parameter.
+    """
 
     permission_classes = [IsAuthenticated]
 
@@ -111,6 +129,9 @@ class CompanyRetrieveView(generics.RetrieveAPIView):
 
 
 class JobRegisterView(generics.CreateAPIView):
+    """
+    This view is for registering a new job.
+    """
 
     permission_classes = [IsAuthenticated]
     serializer_class = JobSerializer
@@ -123,6 +144,11 @@ class JobRegisterView(generics.CreateAPIView):
 
 
 class JobListView(generics.ListCreateAPIView):
+    """
+    This view is for retrieving a list of jobs, and for registering a new job.
+    Pagination is applied to reduce the amount of data returned.
+    TODO: Implement filtering classes
+    """
 
     permission_classes = [IsAuthenticated]
     queryset = Job.objects.all()
@@ -144,7 +170,11 @@ class JobListView(generics.ListCreateAPIView):
 
 
 class JobDetailView(generics.RetrieveAPIView):
-
+    """
+    This view is for retrieving a job based on the provided job ID.
+    Provides more detail than the above JobListView, as this view also returns
+    the details on the qualifications and the responsibilities of the job.
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = JobSerializer
 
@@ -158,6 +188,10 @@ class JobDetailView(generics.RetrieveAPIView):
 
 
 class SaveJobView(APIView):
+    """
+    This view is for saving a job to the user's saved jobs list, as well as
+    unsaving a job from the user's saved jobs list.
+    """
 
     permission_classes = [IsAuthenticated]
 
