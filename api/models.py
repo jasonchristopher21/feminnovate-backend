@@ -34,3 +34,12 @@ class UserProfile(BaseModel):
     
     # TODO: Add experiences, jobs and workshops once the models are created.
     # Should have been depicted as either a one-to-many or many-to-many field.
+
+class CompanyProfile(BaseModel):
+    """
+    Model to store company profile information
+    """
+    name = models.CharField(max_length=155)
+    description = models.TextField()
+    picture = models.URLField(max_length=155, blank=True)
+    website = models.URLField(max_length=155, blank=True)

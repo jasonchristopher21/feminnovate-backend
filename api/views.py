@@ -9,7 +9,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from api.models import (
+    CompanyProfile
+)
+
 from api.serializers import (
+    CompanyProfileSerializer,
     JwtSerializer,
     UserSerializer,
     UserProfileSerializer,
@@ -74,6 +79,23 @@ class UserView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     
-
 class JwtView(TokenObtainPairView):
     serializer_class = JwtSerializer
+
+class CompanyRegisterView(generics.ListCreateAPIView):
+
+    serializer_class = CompanyProfileSerializer
+    permission_classes = [AllowAny]
+    queryset = CompanyProfile.objects.all()
+
+
+class CompanyRetrieveView(generics.RetrieveAPIView):
+
+    def get(self, request, id):
+        try:
+            company = CompanyProfile.objects.get(pk=id)
+        except:
+            return Response({"message": "Company with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CompanyProfileSerializer(company)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    

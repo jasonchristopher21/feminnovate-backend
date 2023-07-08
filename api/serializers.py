@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from api.logic.user_management import register_user, update_user
 
 from api.models import (
+    CompanyProfile,
     UserProfile
 )
 
@@ -25,6 +26,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['user', 'name', 'description', 'picture']
 
 
+class CompanyProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CompanyProfile
+        fields = ['id', 'name', 'description', 'picture', 'website']
+
+
 class UserRegistrationSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=155)
     username = serializers.CharField(max_length=155)
@@ -34,7 +42,8 @@ class UserRegistrationSerializer(serializers.Serializer):
     def create(self, validated_data):
         user_details = register_user(**validated_data)
         # user_details.pop('password', None)
-        refresh = RefreshToken.for_user(User.objects.get(username=user_details.get('username')))
+        refresh = RefreshToken.for_user(User.objects.get(
+            username=user_details.get('username')))
         user_details['refresh'] = str(refresh)
         user_details['access'] = str(refresh.access_token)
         return user_details
@@ -45,6 +54,7 @@ class UserRegistrationSerializer(serializers.Serializer):
         representation['refresh'] = instance.get('refresh')
         representation['access'] = instance.get('access')
         return representation
+
 
 class UserUpdateSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=155)
@@ -57,6 +67,7 @@ class UserUpdateSerializer(serializers.Serializer):
         user = validated_data.pop('user')
         user_details = update_user(user, **validated_data)
         return user_details
+
 
 class JwtSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
