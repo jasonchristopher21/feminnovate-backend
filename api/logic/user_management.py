@@ -50,3 +50,36 @@ def register_user(
         'name': user_profile.name,
         'password': user.password,
     }
+
+@transaction.atomic
+def update_user(
+    user: User,
+    email: str,
+    password: str,
+    name: str,
+    description: str,
+    picture: str,
+):
+    
+    if (user.email != email):
+        user.email = email
+    if (user.password != password):
+        user.password = password
+    user.save()
+
+    profile = user.userprofile
+    profile.name = name
+    if description:
+        profile.description = description
+    if picture:
+        profile.picture = picture
+    profile.save()
+
+    return {
+        'user': user,
+        'email': user.email,
+        'password': user.password,
+        'name': profile.name,
+        'description': profile.description,
+        'picture': profile.picture,
+    }

@@ -14,6 +14,7 @@ from api.serializers import (
     UserSerializer,
     UserProfileSerializer,
     UserRegistrationSerializer,
+    UserUpdateSerializer,
 )
 
 # Create your views here.
@@ -24,6 +25,8 @@ from api.serializers import (
 
 
 class PublicView(APIView):
+
+    permission_classes = [AllowAny]
 
     def get(self, request):
         return Response({
@@ -61,6 +64,15 @@ class UserView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         serializer = UserProfileSerializer(user.userprofile)
         return Response(serializer.data)
+
+    def put(self, request):
+        user = request.user
+        serializer = UserUpdateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
     
 
 class JwtView(TokenObtainPairView):
