@@ -6,12 +6,14 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.serializers import (
+    JwtSerializer,
     UserSerializer,
     UserProfileSerializer,
-    UserRegistrationSerializer
+    UserRegistrationSerializer,
 )
 
 # Create your views here.
@@ -47,6 +49,8 @@ class RegisterUserView(generics.CreateAPIView):
 
 class UserView(APIView):
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, username):
         try:
             user = User.objects.get(username=username)
@@ -57,3 +61,7 @@ class UserView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         serializer = UserProfileSerializer(user.userprofile)
         return Response(serializer.data)
+    
+
+class JwtView(TokenObtainPairView):
+    serializer_class = JwtSerializer

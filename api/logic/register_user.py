@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseBadRequest
 
 from rest_framework.exceptions import APIException
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.models import (
     UserProfile
@@ -41,8 +42,9 @@ def register_user(
         }
     )
 
+    refresh = RefreshToken.for_user(user)
+
     return {
-        'id': user.id,
         'username': user.username,
         'email': user.email,
         'name': user_profile.name,
