@@ -25,6 +25,8 @@ from api.serializers import (
     UserUpdateSerializer,
 )
 
+from api.pagination import JobPagination
+
 # Create your views here.
 # @api_view(['GET'])
 # @permission_classes([AllowAny])
@@ -124,6 +126,7 @@ class JobListView(generics.ListCreateAPIView):
 
     permission_classes = [IsAuthenticated]
     queryset = Job.objects.all()
+    pagination_class = JobPagination
 
     def get_serializer_class(self):
         if (self.request.method == 'POST'):
