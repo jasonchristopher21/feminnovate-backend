@@ -13,5 +13,6 @@ urlpatterns = [
     path('public/', views.PublicView.as_view()),
     path('user/', views.UserView.as_view()),
     path('user/<str:username>/', views.UserView.as_view()),
+    path('save/job/', views.SaveJobView.as_view()),
 ]
 

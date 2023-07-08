@@ -24,7 +24,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['user', 'name', 'description', 'picture']
+        fields = ['user', 'name', 'description', 'picture', 'saved_jobs']
 
 
 class CompanySerializer(serializers.ModelSerializer):
