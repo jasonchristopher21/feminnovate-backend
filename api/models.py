@@ -58,3 +58,13 @@ class Job(BaseModel):
     location = models.CharField(max_length=155, blank=True)
     is_active = models.BooleanField(default=True)
     website = models.URLField(max_length=155, blank=True)
+
+class WorkExperience(BaseModel):
+    """
+    Model to store work experience information
+    """
+    company = models.ForeignKey(Company, on_delete=CASCADE)
+    role = models.CharField(max_length=155)
+    description = models.TextField()
+    start_time = models.DateField()
+    end_time = models.DateField()
