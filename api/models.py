@@ -35,6 +35,7 @@ class UserProfile(BaseModel):
     # TODO: Add experiences, jobs and workshops once the models are created.
     # Should have been depicted as either a one-to-many or many-to-many field.
     saved_jobs = models.ManyToManyField('Job', blank=True)
+    saved_experiences = models.ManyToManyField('WorkExperience', blank=True)
 
 class Company(BaseModel):
     """
