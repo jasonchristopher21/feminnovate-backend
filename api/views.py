@@ -154,7 +154,7 @@ class JobListView(generics.ListCreateAPIView):
 
     permission_classes = [IsAuthenticated]
     queryset = Job.objects.all()
-    pagination_class = JobPagination
+    # pagination_class = JobPagination # Disable pagination for now
 
     def get_serializer_class(self):
         if (self.request.method == 'POST'):
