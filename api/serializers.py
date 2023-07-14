@@ -9,6 +9,7 @@ from api.models import (
     Company,
     Job,
     UserProfile,
+    WorkExperience,
 )
 
 
@@ -121,3 +122,11 @@ class JobListSerializer(serializers.ModelSerializer):
         fields = ['id', 'description', 'company',
                   'salary', 'location', 'is_active']
         read_only_fields = ['company', 'is_active']
+
+class WorkExperienceSerializer(serializers.ModelSerializer):
+    company = CompanySerializer(read_only=True)
+
+    class Meta:
+        model = WorkExperience
+        fields = ['id', 'company', 'role', 'description', 'start_time', 'end_time']
+        read_only_fields = ['company']

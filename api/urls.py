@@ -14,5 +14,7 @@ urlpatterns = [
     path('user/', views.UserView.as_view()),
     path('user/<str:username>/', views.UserView.as_view()),
     path('save/job/', views.SaveJobView.as_view()),
+    path('work_experience/', views.WorkExperienceRegisterView.as_view()),
+    path('work_experience/<int:id>/', views.WorkExperienceRetrieveView.as_view()),
+    path('save/work_experience/', views.SaveWorkExperienceView.as_view()),
 ]
-

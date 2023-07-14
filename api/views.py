@@ -11,7 +11,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import (
     Company,
-    Job
+    Job,
+    WorkExperience,
 )
 
 from api.serializers import (
@@ -22,6 +23,7 @@ from api.serializers import (
     UserProfileSerializer,
     UserRegistrationSerializer,
     UserUpdateSerializer,
+    WorkExperienceSerializer,
 )
 
 from api.pagination import JobPagination
@@ -210,3 +212,51 @@ class SaveJobView(APIView):
             return Response({"message": "Job with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"message": "Error saving job: {}".format(str(e))}, status=status.HTTP_400_BAD_REQUEST)
+
+class WorkExperienceRegisterView(generics.ListCreateAPIView):
+    """
+    This view is for registering a new work experience.
+    """
+    serializer_class = WorkExperienceSerializer
+    permission_classes = [AllowAny]
+    queryset = WorkExperience.objects.all()
+
+class WorkExperienceRetrieveView(generics.RetrieveAPIView):
+    """
+    This view is for retrieving a work experience based on the provided work experience ID
+    as the query parameter.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        try:
+            work_experience = WorkExperience.objects.get(pk=id)
+        except:
+            return Response({"message:": "Work Experience with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = WorkExperienceSerializer(work_experience)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class SaveWorkExperienceView(APIView):
+    """
+    This view is for saving a work experience to the user's saved work experience list, as well
+    as unsaving a work experience from the user's saved work experience list.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            id = request.data.get('work_experience_id')
+            work_experience = WorkExperience.objects.get(pk=id)
+            user = request.user
+            if request.data.get("save") == False:
+                user.userprofile.saved_work_experiences.remove(work_experience)
+                return Response({"message": "Work experience removed from saved work experiences"})
+            else:
+                user.userprofile.saved_work_experiences.add(work_experience)
+                return Response({"message": "Work experience saved successfully"}, status=status.HTTP_200_OK)
+        except WorkExperience.DoesNotExist:
+            return Response({"message": "Work experience with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"message": "Error saving work experience: {}".format(str(e))}, status=status.HTTP_400_BAD_REQUEST)
