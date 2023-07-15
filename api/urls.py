@@ -17,4 +17,7 @@ urlpatterns = [
     path('work_experience/', views.WorkExperienceRegisterView.as_view()),
     path('work_experience/<int:id>/', views.WorkExperienceRetrieveView.as_view()),
     path('save/work_experience/', views.SaveWorkExperienceView.as_view()),
+    path('workshop/', views.WorkshopRegisterView.as_view()),
+    path('workshop/<int:id>/', views.WorkshopRetrieveView.as_view()),
+    path('save/workshop/', views.SaveWorkshopView.as_view())
 ]
