@@ -13,6 +13,7 @@ from api.models import (
     Company,
     Job,
     WorkExperience,
+    Workshop
 )
 
 from api.serializers import (
@@ -24,6 +25,7 @@ from api.serializers import (
     UserRegistrationSerializer,
     UserUpdateSerializer,
     WorkExperienceSerializer,
+    WorkshopSerializer
 )
 
 from api.pagination import JobPagination
@@ -213,6 +215,7 @@ class SaveJobView(APIView):
         except Exception as e:
             return Response({"message": "Error saving job: {}".format(str(e))}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class WorkExperienceRegisterView(generics.ListCreateAPIView):
     """
     This view is for registering a new work experience.
@@ -220,6 +223,7 @@ class WorkExperienceRegisterView(generics.ListCreateAPIView):
     serializer_class = WorkExperienceSerializer
     permission_classes = [AllowAny]
     queryset = WorkExperience.objects.all()
+
 
 class WorkExperienceRetrieveView(generics.RetrieveAPIView):
     """
@@ -236,6 +240,7 @@ class WorkExperienceRetrieveView(generics.RetrieveAPIView):
             return Response({"message:": "Work Experience with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
         serializer = WorkExperienceSerializer(work_experience)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class SaveWorkExperienceView(APIView):
     """
@@ -260,3 +265,66 @@ class SaveWorkExperienceView(APIView):
             return Response({"message": "Work experience with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"message": "Error saving work experience: {}".format(str(e))}, status=status.HTTP_400_BAD_REQUEST)
+
+
+""" WORKSHOP VIEWS
+"""
+
+
+class WorkshopRegisterView(generics.ListCreateAPIView):
+    """
+    This view is for registering a new job.
+    """
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = WorkshopSerializer
+    queryset = Workshop.objects.all()
+
+    def perform_create(self, serializer):
+        company_id = self.request.data.get('company_id')
+        company = Company.objects.get(pk=company_id)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(organizer=company)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class WorkshopRetrieveView(generics.RetrieveAPIView):
+    """
+    This view is for retrieving a workshop based on the provided workshop ID
+    as the query parameter.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        try:
+            workshop = Workshop.objects.get(pk=id)
+        except:
+            return Response({"message:": "Workshop with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = WorkshopSerializer(workshop)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SaveWorkshopView(APIView):
+    """
+    This view is for saving a workshop to the user's saved workshops list, as well
+    as unsaving a workshop from the user's saved workshops list.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            id = request.data.get('workshop_id')
+            workshop = Workshop.objects.get(pk=id)
+            user = request.user
+            if request.data.get("save") == False:
+                user.userprofile.saved_workshops.remove(workshop)
+                return Response({"message": "Workshop removed from saved workshops"})
+            else:
+                user.userprofile.saved_workshops.add(workshop)
+                return Response({"message": "Workshop saved successfully"}, status=status.HTTP_200_OK)
+        except Workshop.DoesNotExist:
+            return Response({"message": "Workshop with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"message": "Error saving workshop: {}".format(str(e))}, status=status.HTTP_400_BAD_REQUEST)
