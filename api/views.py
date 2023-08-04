@@ -319,10 +319,19 @@ class SaveWorkshopView(APIView):
             workshop = Workshop.objects.get(pk=id)
             user = request.user
             if request.data.get("save") == False:
-                user.userprofile.saved_workshops.remove(workshop)
-                return Response({"message": "Workshop removed from saved workshops"})
+                if workshop in user.userprofile.saved_workshops.all():
+                    user.userprofile.saved_workshops.remove(workshop)
+                    workshop.saves -= 1
+                    workshop.save()
+                    return Response({"message": "Workshop removed from saved workshops"})
+                else:
+                    return Response({"message": "Workshop not in saved workshops"}, status=status.HTTP_400_BAD_REQUEST)
             else:
+                if workshop in user.userprofile.saved_workshops.all():
+                    return Response({"message": "Workshop already in saved workshops"}, status=status.HTTP_400_BAD_REQUEST)
                 user.userprofile.saved_workshops.add(workshop)
+                workshop.saves += 1
+                workshop.save()
                 return Response({"message": "Workshop saved successfully"}, status=status.HTTP_200_OK)
         except Workshop.DoesNotExist:
             return Response({"message": "Workshop with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
