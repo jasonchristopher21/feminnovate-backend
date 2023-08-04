@@ -81,3 +81,4 @@ class Workshop(BaseModel):
     location = models.CharField(max_length=155, blank=True)
     website = models.URLField(max_length=155, blank=True)
     picture = models.URLField(max_length=155, blank=True)
+    saves = models.IntegerField(default=0)
