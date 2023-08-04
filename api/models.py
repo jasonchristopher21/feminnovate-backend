@@ -17,7 +17,7 @@ class BaseModel(models.Model):
     """
     Base model to be used for all models (except User)
     """
-    ceated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
