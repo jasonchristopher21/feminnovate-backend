@@ -19,5 +19,7 @@ urlpatterns = [
     path('save/work_experience/', views.SaveWorkExperienceView.as_view()),
     path('workshop/', views.WorkshopRegisterView.as_view()),
     path('workshop/<int:id>/', views.WorkshopRetrieveView.as_view()),
-    path('save/workshop/', views.SaveWorkshopView.as_view())
+    path('save/workshop/', views.SaveWorkshopView.as_view()),
+    path('user/<str:username>/saved_jobs/', views.RetrieveSavedJobsView.as_view()),
+    path('user/<str:username>/saved_workshops/', views.RetrievedSavedWorkshopsView.as_view()),
 ]

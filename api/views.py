@@ -352,3 +352,33 @@ class SaveWorkshopView(APIView):
             return Response({"message": "Workshop with the specified id does not exist"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"message": "Error saving workshop: {}".format(str(e))}, status=status.HTTP_400_BAD_REQUEST)
+
+
+""" NEWCOMERS (FIX LATER)
+"""
+
+class RetrieveSavedJobsView(generics.ListAPIView):
+    """
+    This view is for retrieving the user's saved jobs.
+    """
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = JobListSerializer
+
+    def get_queryset(self):
+        username = self.kwargs['username']  # Extract username from URL
+        user = User.objects.get(username=username)
+        return user.userprofile.saved_jobs.all()
+
+class RetrievedSavedWorkshopsView(generics.ListAPIView):
+    """
+    This view is for retrieving the user's saved workshops.
+    """
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = WorkshopSerializer
+
+    def get_queryset(self):
+        username = self.kwargs['username']  # Extract username from URL
+        user = User.objects.get(username=username)
+        return user.userprofile.saved_workshops.all()
