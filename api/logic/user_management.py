@@ -20,6 +20,7 @@ def register_user(
     email: str,
     password: str,
     name: str,
+    id=None,
 ) -> dict:
 
     try:
@@ -49,6 +50,7 @@ def register_user(
         'email': user.email,
         'name': user_profile.name,
         'password': user.password,
+        'id': user.id,
     }
 
 @transaction.atomic

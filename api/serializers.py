@@ -41,6 +41,7 @@ class UserRegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=155)
     email = serializers.EmailField(max_length=155)
     password = serializers.CharField(max_length=155)
+    id = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data):
         user_details = register_user(**validated_data)
@@ -100,6 +101,7 @@ class JwtSerializer(TokenObtainPairSerializer):
                     'access': str(refresh.access_token),
                     'username': user.username,
                     'email': user.email,
+                    'id': user.id,
                 }
             else:
                 raise exceptions.AuthenticationFailed(detail="Wrong Password")
