@@ -111,7 +111,7 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'title', 'description', 'responsibilities', 'qualifications', 'company', 'salary',
-                  'location', 'is_active']
+                  'location', 'is_active', 'job_type', 'experience']
         read_only_fields = ['company', 'is_active']
 
 
@@ -121,7 +121,7 @@ class JobListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'title', 'description', 'company',
-                  'salary', 'location', 'is_active']
+                  'salary', 'location', 'is_active', 'job_type', 'experience']
         read_only_fields = ['company', 'is_active']
 
 class WorkExperienceSerializer(serializers.ModelSerializer):
