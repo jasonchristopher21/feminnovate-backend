@@ -32,6 +32,7 @@ class UserProfile(BaseModel):
     name = models.CharField(max_length=155)
     description = models.CharField(max_length=155, blank=True)
     picture = models.URLField(max_length=155, blank=True)
+    location = models.CharField(max_length=155, blank=True)
     
     saved_jobs = models.ManyToManyField('Job', blank=True)
     saved_experiences = models.ManyToManyField('WorkExperience', blank=True)

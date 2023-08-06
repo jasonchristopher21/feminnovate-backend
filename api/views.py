@@ -91,8 +91,8 @@ class UserView(APIView):
         serializer = UserProfileSerializer(user.userprofile)
         return Response(serializer.data)
 
-    def put(self, request):
-        user = request.user
+    def put(self, request, username):
+        user = request.user,
         serializer = UserUpdateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=user)
