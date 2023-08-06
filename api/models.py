@@ -11,6 +11,7 @@ from django.db.models.deletion import (
     ProtectedError,
     RestrictedError,
 )
+from api.enums import JobType, Experience
 
 # Create your models here.
 class BaseModel(models.Model):
@@ -56,6 +57,8 @@ class Job(BaseModel):
     company = models.ForeignKey(Company, on_delete=CASCADE)
     salary = models.PositiveIntegerField(blank=True)
     location = models.CharField(max_length=155, blank=True)
+    job_type = models.CharField(max_length=10, choices=JobType.choices, default=JobType.FULL_TIME, blank=True)
+    experience = models.CharField(max_length=3, choices=Experience.choices, default=Experience.BETWEEN_1_2, blank=True)
     is_active = models.BooleanField(default=True)
     website = models.URLField(max_length=155, blank=True)
 

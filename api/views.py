@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.http import HttpResponseBadRequest
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -158,6 +160,13 @@ class JobListView(generics.ListCreateAPIView):
     queryset = Job.objects.all()
     # pagination_class = JobPagination # Disable pagination for now
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = {
+        'company__name': ["in"],
+        'job_type': ["in"],
+        'experience': ["in"],
+    }
+
     def get_serializer_class(self):
         if (self.request.method == 'POST'):
             return JobSerializer
@@ -279,6 +288,12 @@ class WorkshopRegisterView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = WorkshopSerializer
     queryset = Workshop.objects.all()
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fileds = {
+        'organizer__name': ["in"],
+        'location': ["in"],
+    }
 
     def perform_create(self, serializer):
         company_id = self.request.data.get('company_id')
