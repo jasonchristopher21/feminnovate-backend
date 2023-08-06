@@ -290,7 +290,7 @@ class WorkshopRegisterView(generics.ListCreateAPIView):
     queryset = Workshop.objects.all()
 
     filter_backends = [DjangoFilterBackend]
-    filterset_fileds = {
+    filterset_fields = {
         'organizer__name': ["in"],
         'location': ["in"],
     }
