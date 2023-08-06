@@ -61,11 +61,15 @@ def update_user(
     name: str,
     description: str,
     picture: str,
+    location: str,
 ):
     
-    if (user.email != email):
+    user = user[0]
+    
+
+    if email and user.email != email:
         user.email = email
-    if (user.password != password):
+    if password and user.password != password:
         user.password = password
     user.save()
 
@@ -75,6 +79,8 @@ def update_user(
         profile.description = description
     if picture:
         profile.picture = picture
+    if location:
+        profile.location = location
     profile.save()
 
     return {

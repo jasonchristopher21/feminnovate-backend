@@ -26,7 +26,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['user', 'name', 'description', 'picture', 'saved_jobs', 'saved_experiences', 'saved_workshops']
+        fields = ['user', 'name', 'description', 'picture', 'saved_jobs', 'saved_experiences', 'saved_workshops', 'location']
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -61,14 +61,16 @@ class UserRegistrationSerializer(serializers.Serializer):
 
 
 class UserUpdateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=155)
-    email = serializers.EmailField(max_length=155)
-    password = serializers.CharField(max_length=155)
+    name = serializers.CharField(max_length=155, allow_blank=True)
+    email = serializers.EmailField(max_length=155, allow_blank=True)
+    password = serializers.CharField(max_length=155, allow_blank=True)
     description = serializers.CharField(max_length=155, allow_blank=True)
     picture = serializers.URLField(max_length=155, allow_blank=True)
+    location = serializers.CharField(max_length=155, allow_blank=True)
 
     def create(self, validated_data):
         user = validated_data.pop('user')
+        print(validated_data)
         user_details = update_user(user, **validated_data)
         return user_details
 
